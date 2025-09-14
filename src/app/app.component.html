@@ -1,23 +1,29 @@
 <app-header></app-header>
+
 <div class="app-root">
   <!-- Search component -->
-  <!--<app-search></app-search>-->
+  <app-search [placeholder]="'Search courses...'" (search)="onSearch($event)"></app-search>
 
   <!-- Info component -->
-  <!--<app-info></app-info>-->
+  <app-info></app-info>
 
   <!-- Course Card component -->
-  <!--<app-course-card></app-course-card>-->
+  <app-course-card></app-course-card>
 
   <!-- Login Form component -->
-  <!--<app-login-form></app-login-form>-->
+  <app-login-form></app-login-form>
 
-  <!-- Login Form component -->
-  <!--<app-registration-form></app-registration-form>-->
+  <!-- Registration Form component -->
+  <app-registration-form></app-registration-form>
 
-  <!-- Login Form component -->
-  <!--<app-course-form></app-course-form>-->
+  <!-- Course Form component -->
+  <app-course-form></app-course-form>
 
   <!-- Modal component -->
-  <!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->
+  <app-modal
+    [title]="'Title'"
+    [message]="'Message'"
+    [okButtonText]="'Ok'"
+    [cancelButtonText]="'Cancel'">
+  </app-modal>
 </div>
