@@ -1,0 +1,11 @@
+<div class="courses-root">
+  <h2 class="courses-root__title">Courses</h2>
+
+  <app-courses-list
+    [courses]="courses"
+    [editable]="editable"
+    (showCourse)="onShow($event)"
+    (editCourse)="onEdit($event)"
+    (deleteCourse)="onDelete($event)"
+  ></app-courses-list>
+</div>
