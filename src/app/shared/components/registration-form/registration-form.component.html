@@ -6,7 +6,7 @@
         <div class="form__control">
           <label for="name">Name</label>
           <input id="name" formControlName="name" type="text" placeholder="Input text" />
-          <span id="nameErrorMessage" class="text-danger"
+          <span class="text-danger"
                 *ngIf="(submitted || nameControl.touched) && nameControl.errors?.['required']">
             Name is required.
           </span>
@@ -21,9 +21,9 @@
           <input id="email"
                  formControlName="email"
                  type="text"
-                 placeholder="Input text"
-                 EmailValidator />
-          <span id="emailErrorMessage" class="text-danger"
+                 appEmailValidator
+                 placeholder="Input text" />
+          <span class="text-danger"
                 *ngIf="(submitted || emailControl.touched) && emailControl.errors?.['required']">
             Email is required.
           </span>
@@ -41,26 +41,29 @@
               id="password"
               type="password"
               formControlName="password"
+              appTogglePassword
+              #tpReg="togglePassword"
               placeholder="Input text"
               aria-label="Password"
             />
             <button
               type="button"
               class="password-toggle"
-              (click)="togglePassword()"
-              [attr.aria-pressed]="passwordVisible"
+              (click)="tpReg.toggle()"
+              [attr.aria-pressed]="tpReg.visible"
               aria-label="Toggle password visibility"
               tabindex="0"
             >
-              <fa-icon [icon]="passwordVisible ? ['fas','eye-slash'] : ['fas','eye']"></fa-icon>
+              <fa-icon [icon]="tpReg.visible ? ['fas','eye-slash'] : ['fas','eye']"></fa-icon>
             </button>
           </div>
 
-          <span id="passwordErrorMessage" class="text-danger"
+          <span class="text-danger"
                 *ngIf="(submitted || passwordControl.touched) && passwordControl.errors?.['required']">
             Password is required.
           </span>
         </div>
+
       </div>
 
       <div class="form__action">

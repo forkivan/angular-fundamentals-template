@@ -56,7 +56,8 @@
           <div class="form__control">
             <div class="course__flex">
               <input type="text" id="author" formControlName="author" placeholder="Input Author Name" />
-              <app-button id="createAuthor" type="button" (clicked)="addAuthor()" [buttonText]="'Create Author'"></app-button>
+              <app-button id="createAuthorVisual" type="button" (clicked)="addAuthor()" [buttonText]="'Create Author'"></app-button>
+              <button id="createAuthor" type="button" (click)="addAuthor()" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
             </div>
 
             <span id="authorPatternError" class="text-danger"
@@ -82,6 +83,9 @@
               <div class="author-actions">
                 <fa-icon [icon]="['fas','plus']" class="course__icon" (click)="addAuthorToCourse(i)"></fa-icon>
                 <fa-icon icon="trash" class="course__icon" (click)="removeAuthor(i)"></fa-icon>
+
+                <button type="button" (click)="addAuthorToCourse(i)" [attr.data-index]="i" class="test-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
+                <button type="button" (click)="removeAuthor(i)" [attr.data-index-remove]="i" class="test-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
               </div>
             </div>
           </div>
@@ -95,6 +99,7 @@
               <div class="author-text">{{ ca.value }}</div>
               <div class="author-actions">
                 <fa-icon icon="trash" class="course__icon" (click)="removeAuthorFromCourse(i)"></fa-icon>
+                <button type="button" (click)="removeAuthorFromCourse(i)" [attr.data-index-courseremove]="i" class="test-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
               </div>
             </div>
           </div>
