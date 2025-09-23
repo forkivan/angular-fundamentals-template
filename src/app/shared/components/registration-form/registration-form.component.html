@@ -6,7 +6,7 @@
         <div class="form__control">
           <label for="name">Name</label>
           <input id="name" formControlName="name" type="text" placeholder="Input text" />
-          <span class="text-danger"
+          <span id="nameErrorMessage" class="text-danger"
                 *ngIf="(submitted || nameControl.touched) && nameControl.errors?.['required']">
             Name is required.
           </span>
@@ -18,12 +18,12 @@
 
         <div class="form__control">
           <label for="email">Email</label>
-          <!-- emailValidator attribute removed from template-driven (we use reactive validator) -->
           <input id="email"
                  formControlName="email"
                  type="text"
-                 placeholder="Input text" />
-          <span class="text-danger"
+                 placeholder="Input text"
+                 appEmailValidator />
+          <span id="emailErrorMessage" class="text-danger"
                 *ngIf="(submitted || emailControl.touched) && emailControl.errors?.['required']">
             Email is required.
           </span>
@@ -37,7 +37,6 @@
           <label for="password">Password</label>
 
           <div class="input-with-icon">
-            <!-- input has id="password" so component can find and toggle it -->
             <input
               id="password"
               type="password"
@@ -57,16 +56,14 @@
             </button>
           </div>
 
-          <span class="text-danger"
+          <span id="passwordErrorMessage" class="text-danger"
                 *ngIf="(submitted || passwordControl.touched) && passwordControl.errors?.['required']">
             Password is required.
           </span>
         </div>
-
       </div>
 
       <div class="form__action">
-        <!-- app-button triggers onSubmit; hidden native submit ensures form submission in tests -->
         <app-button (clicked)="onSubmit()" [buttonText]="'Register'"></app-button>
         <button type="submit" style="display:none"></button>
       </div>
