@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Renderer2, OnInit } from '@angular/core';
 
 @Directive({
-  selector: '[appTogglePassword]',
+  selector: '[appTogglePassword],[app-toggle-password]',
   exportAs: 'togglePassword'
 })
 export class TogglePasswordDirective implements OnInit {
@@ -10,10 +10,12 @@ export class TogglePasswordDirective implements OnInit {
   constructor(private el: ElementRef<HTMLInputElement>, private renderer: Renderer2) {}
 
   ngOnInit(): void {
-    // Ensure input has type password by default
-    const current = this.el.nativeElement.getAttribute('type');
+    const native = this.el.nativeElement;
+    const current = native.getAttribute('type');
     if (current !== 'password' && current !== 'text') {
-      this.renderer.setAttribute(this.el.nativeElement, 'type', 'password');
+      this.renderer.setAttribute(native, 'type', 'password');
+    } else {
+      this.renderer.setAttribute(native, 'type', current || 'password');
     }
   }
 
