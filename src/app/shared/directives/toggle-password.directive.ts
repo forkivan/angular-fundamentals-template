@@ -10,6 +10,7 @@ export class TogglePasswordDirective implements OnInit {
   constructor(private el: ElementRef<HTMLInputElement>, private renderer: Renderer2) {}
 
   ngOnInit(): void {
+    // Ensure input has type password by default
     const current = this.el.nativeElement.getAttribute('type');
     if (current !== 'password' && current !== 'text') {
       this.renderer.setAttribute(this.el.nativeElement, 'type', 'password');
@@ -19,7 +20,6 @@ export class TogglePasswordDirective implements OnInit {
   toggle(): void {
     this._visible = !this._visible;
     this.renderer.setAttribute(this.el.nativeElement, 'type', this._visible ? 'text' : 'password');
-    try { this.el.nativeElement.focus(); } catch (e) { /* ignore */ }
   }
 
   get visible(): boolean {

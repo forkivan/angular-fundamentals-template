@@ -1,6 +1,10 @@
+// src/app/shared/shared.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+// components (відносні імпорти)
 import { ModalComponent } from './components/modal/modal.component';
 import {
   HeaderComponent,
@@ -11,12 +15,15 @@ import {
   LoginFormComponent,
   RegistrationFormComponent,
   CourseFormComponent
-} from "./components";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+} from './components';
+
+// pipes (відносні імпорти)
 import { DurationPipe } from './pipes/duration.pipe';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
-import { EmailValidatorDirective } from '@shared/directives/email.directive';
-import { TogglePasswordDirective } from '@shared/directives/toggle-password.directive';
+
+// directives (відносні імпорти)
+import { EmailValidatorDirective } from './directives/email.directive';
+import { TogglePasswordDirective } from './directives/toggle-password.directive';
 
 const components = [
   HeaderComponent,
@@ -27,21 +34,39 @@ const components = [
   CourseCardComponent,
   LoginFormComponent,
   RegistrationFormComponent,
-  CourseFormComponent,
+  CourseFormComponent
+];
+
+const pipes = [
   DurationPipe,
-  CustomDatePipe,
+  CustomDatePipe
+];
+
+const directives = [
   EmailValidatorDirective,
   TogglePasswordDirective
 ];
 
 @NgModule({
-  declarations: components,
+  declarations: [
+    ...components,
+    ...pipes,
+    ...directives
+  ],
   imports: [
     CommonModule,
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports: components
+  exports: [
+    ...components,
+    ...pipes,
+    ...directives,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FontAwesomeModule
+  ]
 })
 export class SharedModule { }
