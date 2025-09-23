@@ -27,11 +27,34 @@
 
         <div class="form__control">
           <label for="password">Password</label>
-          <input id="password" formControlName="password" type="password" placeholder="Input text" />
-          <span class="text-danger" *ngIf="(submitted || registrationForm.get('password')?.touched) && registrationForm.get('password')?.errors?.['required']">
+
+          <div class="input-with-icon">
+            <input
+              id="password"
+              formControlName="password"
+              appTogglePassword
+              #tpReg="togglePassword"
+              placeholder="Input text"
+              aria-label="Password"
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="tpReg.toggle()"
+              [attr.aria-pressed]="tpReg.visible"
+              aria-label="Toggle password visibility"
+              tabindex="0"
+            >
+              <fa-icon [icon]="tpReg.visible ? ['fas','eye-slash'] : ['fas','eye']"></fa-icon>
+            </button>
+          </div>
+
+          <span class="text-danger"
+                *ngIf="(submitted || registrationForm.get('password')?.touched) && registrationForm.get('password')?.errors?.['required']">
             Password is required.
           </span>
         </div>
+
       </div>
 
       <div class="form__action">

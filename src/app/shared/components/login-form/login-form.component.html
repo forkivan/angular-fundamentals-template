@@ -33,15 +33,31 @@
 
         <div class="form__control">
           <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            ngModel
-            #password="ngModel"
-            placeholder="Input text"
-          />
+
+          <div class="input-with-icon">
+            <input
+              id="password"
+              name="password"
+              required
+              ngModel
+              #password="ngModel"
+              appTogglePassword
+              #tp="togglePassword"
+              placeholder="Input text"
+              aria-label="Password"
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="tp.toggle()"
+              [attr.aria-pressed]="tp.visible"
+              aria-label="Toggle password visibility"
+              tabindex="0"
+            >
+              <fa-icon [icon]="tp.visible ? ['fas','eye-slash'] : ['fas','eye']"></fa-icon>
+            </button>
+          </div>
+
           <span
             id="passwordErrorMessage"
             class="text-danger"

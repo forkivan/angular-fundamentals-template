@@ -1,20 +1,19 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-  name: 'duration'
-})
+@Pipe({ name: 'duration' })
 export class DurationPipe implements PipeTransform {
-  transform(value: number): string {
-    if (value == null || value < 0) {
-      return '00:00 hours';
-    }
+  transform(value: number | string | null | undefined): string {
+    const n = Number(value);
+    const total = Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
 
-    const hours = Math.floor(value / 60);
-    const minutes = value % 60;
+    const hours = Math.floor(total / 60);
+    const minutes = total % 60;
 
-    const hh = hours.toString().padStart(2, '0');
-    const mm = minutes.toString().padStart(2, '0');
+    const hh = String(hours).padStart(2, '0');
+    const mm = String(minutes).padStart(2, '0');
 
-    return `${hh}:${mm} hours`;
+    const suffix = hours > 1 ? 'hours' : 'hour';
+
+    return `${hh}:${mm} ${suffix}`;
   }
 }

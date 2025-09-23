@@ -12,6 +12,7 @@ export class SearchComponent {
   searchTerm: string = '';
 
   onSearch() {
-    this.search.emit(this.searchTerm);
+    const term = (this.searchTerm || '').trim();
+    this.search.emit(term);
   }
 }
