@@ -7,11 +7,11 @@
       <div class="form__control">
         <label for="title">Title</label>
         <input type="text" id="title" formControlName="title" placeholder="Input text" />
-        <span class="text-danger"
+        <span id="titleErrorMessage" class="text-danger"
               *ngIf="(courseForm.get('title')?.touched || submitted) && courseForm.get('title')?.errors?.['required']">
           Title is required.
         </span>
-        <span class="text-danger"
+        <span id="titleMinLengthError" class="text-danger"
               *ngIf="(courseForm.get('title')?.touched || submitted) && courseForm.get('title')?.errors?.['minlength']">
           Title must be at least 2 characters.
         </span>
@@ -20,11 +20,11 @@
       <div class="form__control">
         <label for="description">Description</label>
         <textarea id="description" formControlName="description" placeholder="Input text" rows="4" cols="5"></textarea>
-        <span class="text-danger"
+        <span id="descriptionErrorMessage" class="text-danger"
               *ngIf="(courseForm.get('description')?.touched || submitted) && courseForm.get('description')?.errors?.['required']">
           Description is required.
         </span>
-        <span class="text-danger"
+        <span id="descriptionMinLengthError" class="text-danger"
               *ngIf="(courseForm.get('description')?.touched || submitted) && courseForm.get('description')?.errors?.['minlength']">
           Description must be at least 2 characters.
         </span>
@@ -41,11 +41,11 @@
                 {{ courseForm.get('duration')?.value | duration }}
               </div>
             </div>
-            <span class="text-danger"
+            <span id="durationErrorMessage" class="text-danger"
                   *ngIf="(courseForm.get('duration')?.touched || submitted) && courseForm.get('duration')?.errors?.['required']">
               Duration is required.
             </span>
-            <span class="text-danger"
+            <span id="durationMinError" class="text-danger"
                   *ngIf="(courseForm.get('duration')?.touched || submitted) && courseForm.get('duration')?.errors?.['min']">
               Duration must be greater than or equal to 0.
             </span>
@@ -93,7 +93,7 @@
 
         <div class="col-right">
           <h2>Course Authors</h2>
-          <span class="inputLabel" *ngIf="courseAuthorsControls.length === 0">Author list is empty</span>
+          <span id="courseAuthorsEmpty" class="inputLabel" *ngIf="courseAuthorsControls.length === 0">Author list is empty</span>
           <div class="course__authors">
             <div *ngFor="let ca of courseAuthorsControls; let i = index" class="course__authors-item">
               <div class="author-text">{{ ca.value }}</div>
