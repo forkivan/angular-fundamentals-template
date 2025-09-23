@@ -1,25 +1,47 @@
 <h2 class="text-align-center">Registration</h2>
 <div class="app-plate">
-  <div class="registration-form">
-    <div>
-      <div class="form__control">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" ngModel placeholder="Input text"/>
-        <span id="nameErrorMessage" class="text-danger">Name is required.</span>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div class="registration-form">
+      <div>
+        <div class="form__control">
+          <label for="name">Name</label>
+          <input id="name" formControlName="name" type="text" placeholder="Input text" />
+          <span class="text-danger" *ngIf="(submitted || registrationForm.get('name')?.touched) && registrationForm.get('name')?.errors?.['required']">
+            Name is required.
+          </span>
+          <span class="text-danger" *ngIf="(submitted || registrationForm.get('name')?.touched) && registrationForm.get('name')?.errors?.['minlength']">
+            Name should be at least 6 characters.
+          </span>
+        </div>
+
+        <div class="form__control">
+          <label for="email">Email</label>
+          <input id="email" formControlName="email" type="text" placeholder="Input text" />
+          <span class="text-danger" *ngIf="(submitted || registrationForm.get('email')?.touched) && registrationForm.get('email')?.errors?.['required']">
+            Email is required.
+          </span>
+          <span class="text-danger" *ngIf="(submitted || registrationForm.get('email')?.touched) && registrationForm.get('email')?.errors?.['emailInvalid']">
+            Email is invalid.
+          </span>
+        </div>
+
+        <div class="form__control">
+          <label for="password">Password</label>
+          <input id="password" formControlName="password" type="password" placeholder="Input text" />
+          <span class="text-danger" *ngIf="(submitted || registrationForm.get('password')?.touched) && registrationForm.get('password')?.errors?.['required']">
+            Password is required.
+          </span>
+        </div>
       </div>
-      <div class="form__control">
-        <label for="email">Email</label>
-        <input type="text" id="email" name="email" ngModel placeholder="Input text"/>
-        <span id="emailErrorMessage" class="text-danger">Email is required.</span>
+
+      <div class="form__action">
+        <app-button [buttonText]="'Register'"></app-button>
+        <button type="submit" style="display:none"></button>
       </div>
-      <div class="form__control">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" ngModel placeholder="Input text"/>
-        <span id="passwordErrorMessage" class="text-danger">Password is required.</span>
+
+      <div class="form__text">
+        Already have an account? <a routerLink="/login">Login</a>
       </div>
     </div>
-    <div class="form__action">
-      <app-button [buttonText]="'Register'"></app-button>
-    </div>
-  </div>
+  </form>
 </div>
