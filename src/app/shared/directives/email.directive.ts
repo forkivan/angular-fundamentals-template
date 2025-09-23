@@ -1,33 +1,20 @@
-import { Directive, Input } from '@angular/core';
-import {
-  AbstractControl,
-  NG_VALIDATORS,
-  ValidationErrors,
-  Validator,
-  ValidatorFn
-} from '@angular/forms';
-
-export function emailValidatorFn(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control?.value;
-    if (!value) return null;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value) ? null : { emailInvalid: true };
-  };
-}
+import { Directive } from '@angular/core';
+import { NG_VALIDATORS, Validator, AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Directive({
-  selector: '[emailValidator]',
+  selector: '[appEmailValidator]',
   providers: [
     {
       provide: NG_VALIDATORS,
       useExisting: EmailValidatorDirective,
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class EmailValidatorDirective implements Validator {
   validate(control: AbstractControl): ValidationErrors | null {
-    return emailValidatorFn()(control);
+    if (!control.value) return null;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(control.value) ? null : { emailInvalid: true };
   }
 }
