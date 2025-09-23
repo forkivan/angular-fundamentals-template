@@ -18,8 +18,8 @@ export class CourseFormComponent {
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
-      author: ['', [Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9 ]+$/)]],
-      authors: this.fb.array([this.fb.control('Author One'), this.fb.control('Author Two')]),
+      author: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9 ]+$/)]],
+      authors: this.fb.array([]),
       courseAuthors: this.fb.array([]),
       duration: [0, [Validators.required, Validators.min(0)]],
     });
@@ -45,13 +45,15 @@ export class CourseFormComponent {
     return this.courseForm.get('author') as FormControl;
   }
 
-
   addAuthor(): void {
     this.authorControl.markAsTouched();
 
     if (!this.authorControl.value || this.authorControl.invalid) return;
 
-    this.authors.push(this.fb.control(this.authorControl.value.trim()));
+    const value = this.authorControl.value.trim();
+    if (!value) return;
+
+    this.authors.push(this.fb.control(value));
     this.authorControl.reset();
   }
 
@@ -62,7 +64,12 @@ export class CourseFormComponent {
   addAuthorToCourse(index: number): void {
     const ctrl = this.authors.at(index) as FormControl;
     if (!ctrl) return;
-    this.courseAuthors.push(this.fb.control(ctrl.value));
+
+    const val = ctrl.value;
+    const already = this.courseAuthorsControls.some(c => c.value === val);
+    if (!already) {
+      this.courseAuthors.push(this.fb.control(val));
+    }
     this.authors.removeAt(index);
   }
 
@@ -91,7 +98,6 @@ export class CourseFormComponent {
         authors: this.courseAuthorsControls.map(c => c.value),
       };
       console.log('Course saved:', payload);
-      
     }
   }
 }

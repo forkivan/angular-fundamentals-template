@@ -22,7 +22,7 @@
                  formControlName="email"
                  type="text"
                  placeholder="Input text"
-                 appEmailValidator />
+                 EmailValidator />
           <span id="emailErrorMessage" class="text-danger"
                 *ngIf="(submitted || emailControl.touched) && emailControl.errors?.['required']">
             Email is required.
