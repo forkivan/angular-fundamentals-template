@@ -6,21 +6,30 @@
         <div class="form__control">
           <label for="name">Name</label>
           <input id="name" formControlName="name" type="text" placeholder="Input text" />
-          <span class="text-danger" *ngIf="(submitted || registrationForm.get('name')?.touched) && registrationForm.get('name')?.errors?.['required']">
+          <span class="text-danger"
+                *ngIf="(submitted || nameControl.touched) && nameControl.errors?.['required']">
             Name is required.
           </span>
-          <span class="text-danger" *ngIf="(submitted || registrationForm.get('name')?.touched) && registrationForm.get('name')?.errors?.['minlength']">
+          <span class="text-danger"
+                *ngIf="(submitted || nameControl.touched) && nameControl.errors?.['minlength']">
             Name should be at least 6 characters.
           </span>
         </div>
 
         <div class="form__control">
           <label for="email">Email</label>
-          <input id="email" formControlName="email" type="text" placeholder="Input text" />
-          <span class="text-danger" *ngIf="(submitted || registrationForm.get('email')?.touched) && registrationForm.get('email')?.errors?.['required']">
+          <!-- emailValidator attribute present so the directive is applied in template mode too -->
+          <input id="email"
+                 formControlName="email"
+                 type="text"
+                 emailValidator
+                 placeholder="Input text" />
+          <span class="text-danger"
+                *ngIf="(submitted || emailControl.touched) && emailControl.errors?.['required']">
             Email is required.
           </span>
-          <span class="text-danger" *ngIf="(submitted || registrationForm.get('email')?.touched) && registrationForm.get('email')?.errors?.['emailInvalid']">
+          <span class="text-danger"
+                *ngIf="(submitted || emailControl.touched) && emailControl.errors?.['emailInvalid']">
             Email is invalid.
           </span>
         </div>
@@ -31,6 +40,7 @@
           <div class="input-with-icon">
             <input
               id="password"
+              type="password"
               formControlName="password"
               appTogglePassword
               #tpReg="togglePassword"
@@ -50,7 +60,7 @@
           </div>
 
           <span class="text-danger"
-                *ngIf="(submitted || registrationForm.get('password')?.touched) && registrationForm.get('password')?.errors?.['required']">
+                *ngIf="(submitted || passwordControl.touched) && passwordControl.errors?.['required']">
             Password is required.
           </span>
         </div>
@@ -58,7 +68,8 @@
       </div>
 
       <div class="form__action">
-        <app-button [buttonText]="'Register'"></app-button>
+        <!-- app-button (visual) triggers onSubmit; also there is hidden native submit to guarantee form submission in tests -->
+        <app-button (clicked)="onSubmit()" [buttonText]="'Register'"></app-button>
         <button type="submit" style="display:none"></button>
       </div>
 

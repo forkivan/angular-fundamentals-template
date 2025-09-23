@@ -19,6 +19,7 @@ export class TogglePasswordDirective implements OnInit {
   toggle(): void {
     this._visible = !this._visible;
     this.renderer.setAttribute(this.el.nativeElement, 'type', this._visible ? 'text' : 'password');
+    try { this.el.nativeElement.focus(); } catch (e) { /* ignore */ }
   }
 
   get visible(): boolean {

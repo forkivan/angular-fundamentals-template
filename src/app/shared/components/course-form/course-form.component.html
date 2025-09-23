@@ -1,4 +1,4 @@
-<h2>Course Edit/Create Page  </h2>
+<h2>Course Edit/Create Page</h2>
 <form [formGroup]="courseForm" (ngSubmit)="submit()">
   <div class="app-plate">
     <div class="course">
@@ -30,15 +30,13 @@
         </span>
       </div>
 
-      
-
       <div class="two-col">
         <div class="col-left">
           <h2>Duration</h2>
-          <label for="title">Duration</label>
+          <label for="duration">Duration</label>
           <div class="form__control">
             <div class="course__flex">
-              <input type="text" id="duration" formControlName="duration" placeholder="Input duration" />
+              <input type="number" id="duration" formControlName="duration" placeholder="Input duration" />
               <div class="course__duration-inline">
                 {{ courseForm.get('duration')?.value | duration }}
               </div>
@@ -54,23 +52,30 @@
           </div>
 
           <h2>Authors</h2>
-          <label for="title">Author Name</label>
+          <label for="author">Author Name</label>
           <div class="form__control">
             <div class="course__flex">
               <input type="text" id="author" formControlName="author" placeholder="Input Author Name" />
-              <app-button (clicked)="addAuthor()" [buttonText]="'Create Author'"></app-button>
+              <app-button id="createAuthor" type="button" (clicked)="addAuthor()" [buttonText]="'Create Author'"></app-button>
             </div>
-            <span class="text-danger"
+
+            <span id="authorPatternError" class="text-danger"
                   *ngIf="(authorControl.touched || submitted) && authorControl.errors?.['pattern']">
               New author should contain only latin letters and numbers.
             </span>
-            <span class="text-danger"
+
+            <span id="authorMinLengthError" class="text-danger"
                   *ngIf="(authorControl.touched || submitted) && authorControl.errors?.['minlength']">
               Author name must be at least 2 characters.
             </span>
+
+            <span id="authorErrorMessage" class="text-danger"
+                  *ngIf="(authorControl.touched || submitted) && authorControl.invalid && !authorControl.errors?.['pattern'] && !authorControl.errors?.['minlength']">
+              New author is invalid.
+            </span>
           </div>
 
-          <h4>Authors List</h4>
+          <h4 id="course__authors__list__label">Authors List</h4>
           <div class="course__authors">
             <div *ngFor="let a of authorsControls; let i = index" class="course__authors-item">
               <div class="author-text">{{ a.value }}</div>
@@ -81,8 +86,6 @@
             </div>
           </div>
         </div>
-
-        
 
         <div class="col-right">
           <h2>Course Authors</h2>

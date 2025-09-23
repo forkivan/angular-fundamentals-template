@@ -45,9 +45,12 @@ export class CourseFormComponent {
     return this.courseForm.get('author') as FormControl;
   }
 
+
   addAuthor(): void {
     this.authorControl.markAsTouched();
+
     if (!this.authorControl.value || this.authorControl.invalid) return;
+
     this.authors.push(this.fb.control(this.authorControl.value.trim()));
     this.authorControl.reset();
   }
@@ -70,6 +73,14 @@ export class CourseFormComponent {
     this.courseAuthors.removeAt(index);
   }
 
+  deleteAuthor(index: number): void {
+    this.authors.removeAt(index);
+  }
+
+  onSubmit(): void {
+    this.submit();
+  }
+
   submit(): void {
     this.submitted = true;
     if (this.courseForm.valid) {
@@ -80,6 +91,7 @@ export class CourseFormComponent {
         authors: this.courseAuthorsControls.map(c => c.value),
       };
       console.log('Course saved:', payload);
+      
     }
   }
 }
