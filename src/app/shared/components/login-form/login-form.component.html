@@ -41,20 +41,20 @@
               required
               ngModel
               #password="ngModel"
-              appTogglePassword
-              #tp="togglePassword"
+              #passwordInput
+              type="password"
               placeholder="Input text"
               aria-label="Password"
             />
             <button
               type="button"
               class="password-toggle"
-              (click)="tp.toggle()"
-              [attr.aria-pressed]="tp.visible"
+              (click)="passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password'"
+              [attr.aria-pressed]="passwordInput.type === 'text'"
               aria-label="Toggle password visibility"
               tabindex="0"
             >
-              <fa-icon [icon]="tp.visible ? ['fas','eye-slash'] : ['fas','eye']"></fa-icon>
+              <fa-icon [icon]="passwordInput.type === 'text' ? ['fas','eye-slash'] : ['fas','eye']"></fa-icon>
             </button>
           </div>
 
