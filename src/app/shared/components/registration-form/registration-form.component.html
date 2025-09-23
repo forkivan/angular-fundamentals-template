@@ -18,11 +18,10 @@
 
         <div class="form__control">
           <label for="email">Email</label>
-          <!-- emailValidator attribute present so the directive is applied in template mode too -->
+          <!-- emailValidator attribute removed from template-driven (we use reactive validator) -->
           <input id="email"
                  formControlName="email"
                  type="text"
-                 emailValidator
                  placeholder="Input text" />
           <span class="text-danger"
                 *ngIf="(submitted || emailControl.touched) && emailControl.errors?.['required']">
@@ -38,24 +37,23 @@
           <label for="password">Password</label>
 
           <div class="input-with-icon">
+            <!-- input has id="password" so component can find and toggle it -->
             <input
               id="password"
               type="password"
               formControlName="password"
-              appTogglePassword
-              #tpReg="togglePassword"
               placeholder="Input text"
               aria-label="Password"
             />
             <button
               type="button"
               class="password-toggle"
-              (click)="tpReg.toggle()"
-              [attr.aria-pressed]="tpReg.visible"
+              (click)="togglePassword()"
+              [attr.aria-pressed]="passwordVisible"
               aria-label="Toggle password visibility"
               tabindex="0"
             >
-              <fa-icon [icon]="tpReg.visible ? ['fas','eye-slash'] : ['fas','eye']"></fa-icon>
+              <fa-icon [icon]="passwordVisible ? ['fas','eye-slash'] : ['fas','eye']"></fa-icon>
             </button>
           </div>
 
@@ -68,7 +66,7 @@
       </div>
 
       <div class="form__action">
-        <!-- app-button (visual) triggers onSubmit; also there is hidden native submit to guarantee form submission in tests -->
+        <!-- app-button triggers onSubmit; hidden native submit ensures form submission in tests -->
         <app-button (clicked)="onSubmit()" [buttonText]="'Register'"></app-button>
         <button type="submit" style="display:none"></button>
       </div>
