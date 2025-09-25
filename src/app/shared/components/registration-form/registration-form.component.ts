@@ -1,4 +1,4 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
@@ -10,6 +10,8 @@ export class RegistrationFormComponent {
   registrationForm: FormGroup;
   submitted = false;
   passwordVisible = false;
+
+  @ViewChild('passwordInput') passwordInput!: ElementRef<HTMLInputElement>;
 
   constructor(private fb: FormBuilder, private renderer: Renderer2) {
     this.registrationForm = this.fb.group({
@@ -47,7 +49,9 @@ export class RegistrationFormComponent {
   }
 
   private setPasswordInputType(type: 'text' | 'password'): void {
-    const el = document.getElementById('password') as HTMLInputElement | null;
-    if (el) this.renderer.setAttribute(el, 'type', type);
+    const el = this.passwordInput?.nativeElement;
+    if (el) {
+      this.renderer.setAttribute(el, 'type', type);
+    }
   }
 }
