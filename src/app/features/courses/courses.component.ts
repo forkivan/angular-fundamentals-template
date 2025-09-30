@@ -1,19 +1,45 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
+import { CoursesStoreService } from "@app/services/courses-store.service";
+import { UserStoreService } from "@app/user/services/user-store.service";
+import { Observable } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss']
+  selector: "app-courses",
+  templateUrl: "./courses.component.html",
+  styleUrls: ["./courses.component.scss"],
 })
-export class CoursesComponent {
-  @Input() courses: Array<any> = [];
-  @Input() editable: boolean = false;
+export class CoursesComponent implements OnInit {
+  courses$ = this.coursesStore.courses$;
+  isLoading$ = this.coursesStore.isLoading$;
+  isAdmin$ = this.userStore.isAdmin$;
 
-  @Output() showCourse = new EventEmitter<string>();
-  @Output() editCourse = new EventEmitter<string>();
-  @Output() deleteCourse = new EventEmitter<string>();
+  searchValue: string = "";
 
-  onShow(id: string) { this.showCourse.emit(id); }
-  onEdit(id: string) { this.editCourse.emit(id); }
-  onDelete(id: string) { this.deleteCourse.emit(id); }
+  constructor(
+    private coursesStore: CoursesStoreService,
+    private userStore: UserStoreService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.coursesStore.getAll();
+  }
+  onSearch() {
+    const value = this.searchValue.trim();
+    if (value) {
+      this.coursesStore.filterCourses(value);
+    } else {
+      this.coursesStore.getAll();
+    }
+  }
+  editCourse(courseId: string) {
+    this.router.navigate([`/courses/edit/${courseId}`]);
+  }
+  showCourse(courseId: string) {
+    this.router.navigate([`/courses/${courseId}`]);
+  }
+  deleteCourse(courseId: string) {
+    this.coursesStore.deleteCourse(courseId);
+  }
 }

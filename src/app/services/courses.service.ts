@@ -1,42 +1,49 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class CoursesService {
-    getAll() {
-        // Add your code here
-    }
+  private readonly baseUrl = 'http://localhost:4000/api';
 
-    createCourse(course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  constructor(private http: HttpClient) {}
 
-    editCourse(id: string, course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  getAll(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/courses`);
+  }
 
-    getCourse(id: string) {
-        // Add your code here
-    }
+  createCourse(course: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/courses`, course);
+  }
 
-    deleteCourse(id: string) {
-        // Add your code here
-    }
+  editCourse(id: string, course: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/courses/${id}`, course);
+  }
 
-    filterCourses(value: string) {
-        // Add your code here
-    }
+  getCourse(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/courses/${id}`);
+  }
 
-    getAllAuthors() {
-        // Add your code here
-    }
+  deleteCourse(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/courses/${id}`);
+  }
 
-    createAuthor(name: string) {
-        // Add your code here
-    }
+  filterCourses(value: string): Observable<any[]> {
+    const params = new HttpParams().set('text', value || '');
+    return this.http.get<any[]>(`${this.baseUrl}/courses`, { params });
+  }
 
-    getAuthorById(id: string) {
-        // Add your code here
-    }
+  getAllAuthors(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/authors`);
+  }
+
+  createAuthor(name: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/authors`, { name });
+  }
+
+  getAuthorById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/authors/${id}`);
+  }
 }

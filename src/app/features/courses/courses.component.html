@@ -1,11 +1,20 @@
-<div class="courses-root">
-  <h2 class="courses-root__title">Courses</h2>
-
-  <app-courses-list
-    [courses]="courses"
-    [editable]="editable"
-    (showCourse)="onShow($event)"
-    (editCourse)="onEdit($event)"
-    (deleteCourse)="onDelete($event)"
-  ></app-courses-list>
+<div class="search-bar">
+  <input type="text" [(ngModel)]="searchValue" placeholder="Search courses" />
+  <button (click)="onSearch()">Search</button>
+  <button *ngIf="isAdmin$ | async" routerLink="/courses/add">Add course</button>
 </div>
+
+<div *ngIf="isLoading$ | async" class="loading">Loading...</div>
+
+<ul>
+  <li *ngFor="let course of courses$ | async">
+    <span>{{ course.name }}</span>
+    <button (click)="showCourse(course.id)">Show</button>
+    <button *ngIf="isAdmin$ | async" (click)="editCourse(course.id)">
+      Edit
+    </button>
+    <button *ngIf="isAdmin$ | async" (click)="deleteCourse(course.id)">
+      Delete
+    </button>
+  </li>
+</ul>
