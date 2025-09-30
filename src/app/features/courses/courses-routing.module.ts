@@ -8,21 +8,9 @@ import { AdminGuard } from "../../user/guards/admin.guard";
 
 const routes: Routes = [
   { path: "", component: CoursesComponent, canActivate: [authorizedGuard] },
-  {
-    path: "add",
-    component: CourseFormComponent,
-    canActivate: [authorizedGuard, AdminGuard],
-  },
-  {
-    path: "edit/:id",
-    component: CourseFormComponent,
-    canActivate: [authorizedGuard, AdminGuard],
-  },
-  {
-    path: ":id",
-    component: CourseInfoComponent,
-    canActivate: [authorizedGuard, AdminGuard],
-  },
+  { path: "add", component: CourseFormComponent, canActivate: [authorizedGuard, AdminGuard] },
+  { path: "edit/:id", component: CourseFormComponent, canActivate: [authorizedGuard, AdminGuard] },
+  { path: ":id", component: CourseInfoComponent, canActivate: [authorizedGuard] } // будь-який залогінений користувач
 ];
 
 @NgModule({
