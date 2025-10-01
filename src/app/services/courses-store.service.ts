@@ -42,14 +42,14 @@ export class CoursesStoreService {
   }
 
   getCourse(id: string): Observable<any> {
-    return this.coursesService.getCourse(id);
+    return this.coursesService.getCourse(Number(id));
   }
 
   editCourse(id: string, course: any): Observable<any> {
     this.isLoading$$.next(true);
-    return this.coursesService.editCourse(id, course).pipe(
+    return this.coursesService.editCourse(Number(id), course).pipe(
       tap(updated => {
-        const current = (this.courses$$.value || []).map(c => (c && c.id === id) ? updated : c);
+        const current = (this.courses$$.value || []).map(c => (c && c.id === Number(id)) ? updated : c);
         this.courses$$.next(current);
       }),
       finalize(() => this.isLoading$$.next(false))
@@ -58,9 +58,9 @@ export class CoursesStoreService {
 
   deleteCourse(id: string): Observable<any> {
     this.isLoading$$.next(true);
-    return this.coursesService.deleteCourse(id).pipe(
+    return this.coursesService.deleteCourse(Number(id)).pipe(
       tap(() => {
-        const current = (this.courses$$.value || []).filter(c => !(c && c.id === id));
+        const current = (this.courses$$.value || []).filter(c => !(c && c.id === Number(id)));
         this.courses$$.next(current);
       }),
       finalize(() => this.isLoading$$.next(false))
@@ -91,6 +91,6 @@ export class CoursesStoreService {
   }
 
   getAuthorById(id: string): Observable<any> {
-    return this.coursesService.getAuthorById(id);
+    return this.coursesService.getAuthorById(Number(id));
   }
 }
