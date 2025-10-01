@@ -45,9 +45,25 @@ export class CoursesService {
     return this.http.delete<void>(`${this.apiUrl}/courses/${id}`);
   }
 
-  filterCourses(value: string): Observable<CoursesResponse> {
-    return this.http.get<CoursesResponse>(
-      `${this.apiUrl}/courses/filter?title=${value}`
+  filterCourses(value: string): Observable<Course[]> {
+    const search = (value || "").trim().toLowerCase();
+    if (!search) {
+      return this.getAll().pipe(
+        map(res => res.result || []),
+        catchError(() => of([]))
+      );
+    }
+    return this.getAll().pipe(
+      map(res => res.result || []),
+      map(list =>
+        list.filter(
+          (c: Course) =>
+            !!c &&
+            typeof c.title === "string" &&
+            c.title.toLowerCase().includes(search)
+        )
+      ),
+      catchError(() => of([]))
     );
   }
 
