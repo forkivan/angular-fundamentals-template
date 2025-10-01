@@ -9,6 +9,6 @@ export class notAuthorizedGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
-    return !this.auth.isAuthorised ? true : this.router.parseUrl('/courses');
+    return !this.auth.isAuthorised ? true : this.router.createUrlTree(['/courses']);
   }
 }

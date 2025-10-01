@@ -36,7 +36,7 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/logout`, {}).pipe(
+    return this.http.delete<any>(`${this.baseUrl}/logout`, {}).pipe(
       catchError(() => of(null)),
       finalize(() => {
         this.session.deleteToken();
