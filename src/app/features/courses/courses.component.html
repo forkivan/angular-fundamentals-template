@@ -5,7 +5,7 @@
     placeholder="Search courses"
     (keyup.enter)="onSearch()"
   />
-  <button (click)="onSearch()">Search</button>
+  <app-button [buttonText]="'Search'" (click)="onSearch()"></app-button>
   <button *ngIf="isAdmin$ | async" (click)="addCourse()">Add course</button>
 </div>
 
