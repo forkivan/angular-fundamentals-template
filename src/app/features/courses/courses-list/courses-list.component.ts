@@ -7,22 +7,21 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class CoursesListComponent {
   @Input() courses: Array<any> = [];
-
   @Input() editable: boolean = false;
 
-  @Output() showCourse = new EventEmitter<string>();
-  @Output() editCourse = new EventEmitter<string>();
-  @Output() deleteCourse = new EventEmitter<string>();
+  @Output() showCourse = new EventEmitter<any>();
+  @Output() editCourse = new EventEmitter<any>();
+  @Output() deleteCourse = new EventEmitter<any>();
 
-  onShow(id: string) {
+  onShow(id: any) {
     this.showCourse.emit(id);
   }
 
-  onEdit(id: string) {
+  onEdit(id: any) {
     this.editCourse.emit(id);
   }
 
-  onDelete(id: string) {
+  onDelete(id: any) {
     this.deleteCourse.emit(id);
   }
 }

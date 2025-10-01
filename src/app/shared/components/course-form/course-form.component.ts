@@ -1,18 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoursesStoreService } from '@app/services/courses-store.service';
 
 @Component({
   selector: 'app-course-form',
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.scss'],
 })
-export class CourseFormComponent {
+export class CourseFormComponent implements OnInit {
   courseForm: FormGroup;
   submitted = false;
+  isEdit = false;
+  courseId: string | null = null;
+  isSubmitting = false;
 
-  constructor(public fb: FormBuilder, public library: FaIconLibrary) {
+  constructor(
+    public fb: FormBuilder,
+    public library: FaIconLibrary,
+    private route: ActivatedRoute,
+    private router: Router,
+    private coursesStore: CoursesStoreService
+  ) {
     library.addIconPacks(fas);
 
     this.courseForm = this.fb.group({
@@ -23,6 +34,28 @@ export class CourseFormComponent {
       courseAuthors: this.fb.array([]),
       duration: [0, [Validators.required, Validators.min(0)]],
     });
+  }
+
+  ngOnInit(): void {
+    this.courseId = this.route.snapshot.paramMap.get('id');
+    if (this.courseId) {
+      this.isEdit = true;
+      this.coursesStore.getCourse(this.courseId).subscribe({
+        next: course => {
+          const title = course?.title ?? course?.name ?? '';
+          const description = course?.description ?? '';
+          const duration = course?.duration ?? 0;
+          const authors = course?.authors ?? [];
+
+          this.courseForm.patchValue({ title, description, duration });
+
+          const ca = this.courseAuthors;
+          while (ca.length) ca.removeAt(0);
+          for (const a of authors) ca.push(this.fb.control(a));
+        },
+        error: () => {}
+      });
+    }
   }
 
   get authors(): FormArray {
@@ -50,7 +83,7 @@ export class CourseFormComponent {
 
     if (!this.authorControl.value || this.authorControl.invalid) return;
 
-    const value = this.authorControl.value.trim();
+    const value = (this.authorControl.value as string).trim();
     if (!value) return;
 
     this.authors.push(this.fb.control(value));
@@ -90,14 +123,38 @@ export class CourseFormComponent {
 
   submit(): void {
     this.submitted = true;
-    if (this.courseForm.valid) {
-      const payload = {
-        title: this.courseForm.get('title')?.value,
-        description: this.courseForm.get('description')?.value,
-        duration: this.courseForm.get('duration')?.value,
-        authors: this.courseAuthorsControls.map(c => c.value),
-      };
-      console.log('Course saved:', payload);
+    if (this.courseForm.invalid) return;
+
+    this.isSubmitting = true;
+    const payload = {
+      title: this.courseForm.get('title')?.value,
+      description: this.courseForm.get('description')?.value,
+      duration: this.courseForm.get('duration')?.value,
+      authors: this.courseAuthorsControls.map(c => c.value),
+    };
+
+    if (this.isEdit && this.courseId) {
+      this.coursesStore.editCourse(this.courseId, payload).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.router.navigate(['/courses']);
+        },
+        error: () => {
+          this.isSubmitting = false;
+          alert('Update failed');
+        }
+      });
+    } else {
+      this.coursesStore.createCourse(payload).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.router.navigate(['/courses']);
+        },
+        error: () => {
+          this.isSubmitting = false;
+          alert('Create failed');
+        }
+      });
     }
   }
 }

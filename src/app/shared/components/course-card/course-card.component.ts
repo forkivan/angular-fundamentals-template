@@ -6,17 +6,19 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./course-card.component.scss']
 })
 export class CourseCardComponent {
+  @Input() id: string = '';
   @Input() title: string = '';
   @Input() description?: string;
   @Input() authors?: string;
   @Input() duration?: string;
   @Input() creationDate?: string;
+  @Input() editable: boolean = false;
 
-  @Output() show = new EventEmitter<void>();
-  @Output() edit = new EventEmitter<void>();
-  @Output() delete = new EventEmitter<void>();
+  @Output() clickOnShow = new EventEmitter<string>();
+  @Output() clickOnEdit = new EventEmitter<string>();
+  @Output() clickOnDelete = new EventEmitter<string>();
 
-  onShow() { this.show.emit(); }
-  onEdit() { this.edit.emit(); }
-  onDelete() { this.delete.emit(); }
+  onShow() { this.clickOnShow.emit(this.id); }
+  onEdit() { this.clickOnEdit.emit(this.id); }
+  onDelete() { this.clickOnDelete.emit(this.id); }
 }

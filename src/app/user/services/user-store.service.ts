@@ -19,11 +19,18 @@ export class UserStoreService {
     return this.userService.getUser().pipe(
       tap(user => {
         const userName = user?.name ?? null;
-        const adminFlag = !!(user?.isAdmin || (user?.roles && user.roles.includes('admin')));
+        const adminFlag = !!(user?.isAdmin || (user?.email === 'admin@email.com'));
         this.name$$.next(userName);
         this.isAdmin$$.next(adminFlag);
       })
     );
+  }
+
+  setUserFromPayload(user: any) {
+    const userName = user?.name ?? user?.email ?? null;
+    const adminFlag = !!(user?.isAdmin || (user?.email === 'admin@email.com'));
+    this.name$$.next(userName);
+    this.isAdmin$$.next(adminFlag);
   }
 
   get isAdmin(): boolean {

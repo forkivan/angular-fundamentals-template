@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { CoursesStoreService } from "@app/services/courses-store.service";
 import { UserStoreService } from "@app/user/services/user-store.service";
-import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 
 @Component({
@@ -24,7 +23,9 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {
     this.coursesStore.getAll();
+    this.userStore.getUser().subscribe({ next: () => {} });
   }
+
   onSearch() {
     const value = this.searchValue.trim();
     if (value) {
@@ -33,13 +34,27 @@ export class CoursesComponent implements OnInit {
       this.coursesStore.getAll();
     }
   }
-  editCourse(courseId: string) {
-    this.router.navigate([`/courses/edit/${courseId}`]);
+
+  addCourse() {
+    this.router.navigate(['/courses/add']);
   }
-  showCourse(courseId: string) {
-    this.router.navigate([`/courses/${courseId}`]);
+
+  editCourse(courseId: any) {
+    const id = String(courseId);
+    this.router.navigate([`/courses/edit/${id}`]);
   }
-  deleteCourse(courseId: string) {
-    this.coursesStore.deleteCourse(courseId);
+
+  showCourse(courseId: any) {
+    const id = String(courseId);
+    this.router.navigate([`/courses/${id}`]);
+  }
+
+  deleteCourse(courseId: any) {
+    const id = String(courseId);
+    if (!confirm('Are you sure you want to delete this course?')) return;
+    this.coursesStore.deleteCourse(id).subscribe({
+      next: () => {},
+      error: () => alert('Delete failed')
+    });
   }
 }

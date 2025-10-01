@@ -108,7 +108,7 @@
 
       <div class="form__action">
         <app-button (clicked)="courseForm.reset(); submitted = false" [buttonText]="'Cancel'"></app-button>
-        <app-button (clicked)="submit()" [buttonText]="'Create Course'"></app-button>
+        <app-button (clicked)="submit()" [buttonText]="isEdit ? 'Save' : 'Create Course'"></app-button>
         <button type="submit" style="display:none"></button>
       </div>
     </div>

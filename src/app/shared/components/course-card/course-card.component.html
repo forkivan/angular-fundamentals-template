@@ -20,8 +20,8 @@
     </div>
     <div class="course-card__info-actions">
       <app-button [buttonText]="'Show course'" (clicked)="onShow()"></app-button>
-      <app-button [iconName]="'trash'" (clicked)="onDelete()"></app-button>
-      <app-button [iconName]="'edit'" (clicked)="onEdit()"></app-button> 
+      <app-button *ngIf="editable" [iconName]="'trash'" (clicked)="onDelete()"></app-button>
+      <app-button *ngIf="editable" [iconName]="'edit'" (clicked)="onEdit()"></app-button>
     </div>
   </div>
 </div>
