@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CoursesStoreService } from "@app/services/courses-store.service";
 import { UserStoreService } from "@app/user/services/user-store.service";
 import { Router } from "@angular/router";
+import { SessionStorageService } from "@app/auth/services/session-storage.service";
 
 @Component({
   selector: "app-courses",
@@ -18,20 +19,25 @@ export class CoursesComponent implements OnInit {
   constructor(
     private coursesStore: CoursesStoreService,
     private userStore: UserStoreService,
-    private router: Router
+    private router: Router,
+    private session: SessionStorageService
   ) {}
 
   ngOnInit(): void {
-    this.coursesStore.getAll();
-    this.userStore.getUser().subscribe({ next: () => {} });
+    this.coursesStore.fetchAll();
+
+    const token = this.session.getToken();
+    if (token) {
+      this.userStore.getUser().subscribe({ next: () => {}, error: () => {} });
+    }
   }
 
   onSearch() {
     const value = this.searchValue.trim();
     if (value) {
-      this.coursesStore.filterCourses(value);
+      this.coursesStore.fetchFiltered(value);
     } else {
-      this.coursesStore.getAll();
+      this.coursesStore.fetchAll();
     }
   }
 

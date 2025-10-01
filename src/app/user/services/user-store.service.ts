@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { UserService } from './user.service';
+import { SessionStorageService } from 'src/app/auth/services/session-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,19 @@ export class UserStoreService {
   private isAdmin$$ = new BehaviorSubject<boolean>(false);
   public isAdmin$ = this.isAdmin$$.asObservable();
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private session: SessionStorageService
+  ) {}
 
   getUser(): Observable<any> {
+    const token = this.session.getToken();
+    if (!token) {
+      this.name$$.next(null);
+      this.isAdmin$$.next(false);
+      return of(null);
+    }
+
     return this.userService.getUser().pipe(
       tap(user => {
         const userName = user?.name ?? null;
