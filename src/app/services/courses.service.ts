@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 
 export interface Course {
   id: string;
@@ -47,9 +47,17 @@ export class CoursesService {
 
   filterCourses(value: string): Observable<Course[]> {
     return this.http
-      .get<Course[]>(`${this.apiUrl}/courses/filter?name=${value}`)
-      .pipe(catchError(() => of([])));
+      .get<{ successful: boolean; result: Course[] }>(`${this.apiUrl}/courses/filter`, {
+        params: { title: value }   // 👈 правильно!
+      })
+      .pipe(
+        // беремо тільки масив курсів
+        map(res => res.result || []),
+        catchError(() => of([]))
+      );
   }
+
+
 
   getAllAuthors(): Observable<any> {
     return this.http.get(`${this.apiUrl}/authors/all`);

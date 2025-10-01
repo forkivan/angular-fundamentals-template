@@ -15,6 +15,6 @@ export class UserService {
   }
 
   getUser(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/user`);
+    return this.http.get<any>(`${this.apiUrl}/users/me`);
   }
 }
