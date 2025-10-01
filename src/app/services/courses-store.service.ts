@@ -15,11 +15,19 @@ export class CoursesStoreService {
 
   constructor(private coursesService: CoursesService) {}
 
-  getAll(): void {
+  getAll(): Observable<any[]> {
     this.isLoading$$.next(true);
-    this.coursesService.getAll().pipe(
+    return this.coursesService.getAll().pipe(
+      tap(list => this.courses$$.next(list)),
       finalize(() => this.isLoading$$.next(false))
-    ).subscribe(list => this.courses$$.next(list));
+    );
+  }
+
+  fetchAll(): void {
+    this.getAll().subscribe({
+      next: () => {},
+      error: () => { this.isLoading$$.next(false); }
+    });
   }
 
   createCourse(course: any): Observable<any> {
@@ -59,11 +67,19 @@ export class CoursesStoreService {
     );
   }
 
-  filterCourses(value: string): void {
+  filterCourses(value: string): Observable<any[]> {
     this.isLoading$$.next(true);
-    this.coursesService.filterCourses(value).pipe(
+    return this.coursesService.filterCourses(value).pipe(
+      tap(list => this.courses$$.next(list)),
       finalize(() => this.isLoading$$.next(false))
-    ).subscribe(list => this.courses$$.next(list));
+    );
+  }
+
+  fetchFiltered(value: string): void {
+    this.filterCourses(value).subscribe({
+      next: () => {},
+      error: () => { this.isLoading$$.next(false); }
+    });
   }
 
   getAllAuthors(): Observable<any[]> {
