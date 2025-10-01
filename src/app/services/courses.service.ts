@@ -45,19 +45,11 @@ export class CoursesService {
     return this.http.delete<void>(`${this.apiUrl}/courses/${id}`);
   }
 
-  filterCourses(value: string): Observable<Course[]> {
-    return this.http
-      .get<{ successful: boolean; result: Course[] }>(`${this.apiUrl}/courses/filter`, {
-        params: { title: value }   // 👈 правильно!
-      })
-      .pipe(
-        // беремо тільки масив курсів
-        map(res => res.result || []),
-        catchError(() => of([]))
-      );
+  filterCourses(value: string): Observable<CoursesResponse> {
+    return this.http.get<CoursesResponse>(
+      `${this.apiUrl}/courses/filter?title=${value}`
+    );
   }
-
-
 
   getAllAuthors(): Observable<any> {
     return this.http.get(`${this.apiUrl}/authors/all`);
