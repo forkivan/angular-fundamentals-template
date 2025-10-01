@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap, finalize } from 'rxjs/operators';
+import { tap, finalize, map } from 'rxjs/operators';
 import { CoursesService } from './courses.service';
 
 @Injectable({
@@ -18,6 +18,7 @@ export class CoursesStoreService {
   getAll(): Observable<any[]> {
     this.isLoading$$.next(true);
     return this.coursesService.getAll().pipe(
+      map(res => Array.isArray(res) ? res : (res.result || [])),
       tap(list => this.courses$$.next(list)),
       finalize(() => this.isLoading$$.next(false))
     );
@@ -42,14 +43,14 @@ export class CoursesStoreService {
   }
 
   getCourse(id: string): Observable<any> {
-    return this.coursesService.getCourse(Number(id));
+    return this.coursesService.getCourse(id);
   }
 
   editCourse(id: string, course: any): Observable<any> {
     this.isLoading$$.next(true);
-    return this.coursesService.editCourse(Number(id), course).pipe(
+    return this.coursesService.editCourse(id, course).pipe(
       tap(updated => {
-        const current = (this.courses$$.value || []).map(c => (c && c.id === Number(id)) ? updated : c);
+        const current = (this.courses$$.value || []).map(c => (c && c.id === id) ? updated : c);
         this.courses$$.next(current);
       }),
       finalize(() => this.isLoading$$.next(false))
@@ -58,9 +59,9 @@ export class CoursesStoreService {
 
   deleteCourse(id: string): Observable<any> {
     this.isLoading$$.next(true);
-    return this.coursesService.deleteCourse(Number(id)).pipe(
+    return this.coursesService.deleteCourse(id).pipe(
       tap(() => {
-        const current = (this.courses$$.value || []).filter(c => !(c && c.id === Number(id)));
+        const current = (this.courses$$.value || []).filter(c => !(c && c.id === id));
         this.courses$$.next(current);
       }),
       finalize(() => this.isLoading$$.next(false))
@@ -82,7 +83,7 @@ export class CoursesStoreService {
     });
   }
 
-  getAllAuthors(): Observable<any[]> {
+  getAllAuthors(): Observable<any> {
     return this.coursesService.getAllAuthors();
   }
 
@@ -91,6 +92,6 @@ export class CoursesStoreService {
   }
 
   getAuthorById(id: string): Observable<any> {
-    return this.coursesService.getAuthorById(Number(id));
+    return this.coursesService.getAuthorById(id);
   }
 }
