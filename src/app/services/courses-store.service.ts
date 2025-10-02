@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap, finalize, map } from 'rxjs/operators';
-import { CoursesService } from './courses.service';
+import { tap, finalize } from 'rxjs/operators';
+import { CoursesService, Course } from './courses.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +10,14 @@ export class CoursesStoreService {
   private isLoading$$ = new BehaviorSubject<boolean>(false);
   public isLoading$ = this.isLoading$$.asObservable();
 
-  private courses$$ = new BehaviorSubject<any[]>([]);
+  private courses$$ = new BehaviorSubject<Course[]>([]);
   public courses$ = this.courses$$.asObservable();
 
   constructor(private coursesService: CoursesService) {}
 
-  getAll(): Observable<any[]> {
+  getAll(): Observable<Course[]> {
     this.isLoading$$.next(true);
     return this.coursesService.getAll().pipe(
-      map(res => Array.isArray(res) ? res : (res.result || [])),
       tap(list => this.courses$$.next(list)),
       finalize(() => this.isLoading$$.next(false))
     );
@@ -31,7 +30,7 @@ export class CoursesStoreService {
     });
   }
 
-  createCourse(course: any): Observable<any> {
+  createCourse(course: Course): Observable<Course> {
     this.isLoading$$.next(true);
     return this.coursesService.createCourse(course).pipe(
       tap(created => {
@@ -42,11 +41,11 @@ export class CoursesStoreService {
     );
   }
 
-  getCourse(id: string): Observable<any> {
+  getCourse(id: string): Observable<Course> {
     return this.coursesService.getCourse(id);
   }
 
-  editCourse(id: string, course: any): Observable<any> {
+  editCourse(id: string, course: Course): Observable<Course> {
     this.isLoading$$.next(true);
     return this.coursesService.editCourse(id, course).pipe(
       tap(updated => {
@@ -68,7 +67,7 @@ export class CoursesStoreService {
     );
   }
 
-  filterCourses(value: string): Observable<any[]> {
+  filterCourses(value: string): Observable<Course[]> {
     this.isLoading$$.next(true);
     return this.coursesService.filterCourses(value).pipe(
       tap(list => this.courses$$.next(list)),

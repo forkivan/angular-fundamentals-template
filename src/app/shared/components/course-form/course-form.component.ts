@@ -4,6 +4,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesStoreService } from '@app/services/courses-store.service';
+import { Course } from '@app/services/courses.service';
 
 @Component({
   selector: 'app-course-form',
@@ -16,6 +17,7 @@ export class CourseFormComponent implements OnInit {
   isEdit = false;
   courseId: string | null = null;
   isSubmitting = false;
+  private currentCourse?: Course;
 
   constructor(
     public fb: FormBuilder,
@@ -42,7 +44,8 @@ export class CourseFormComponent implements OnInit {
       this.isEdit = true;
       this.coursesStore.getCourse(this.courseId).subscribe({
         next: course => {
-          const title = course?.title ?? course?.name ?? '';
+          this.currentCourse = course;
+          const title = course?.title ?? '';
           const description = course?.description ?? '';
           const duration = course?.duration ?? 0;
           const authors = course?.authors ?? [];
@@ -126,14 +129,20 @@ export class CourseFormComponent implements OnInit {
     if (this.courseForm.invalid) return;
 
     this.isSubmitting = true;
-    const payload = {
-      title: this.courseForm.get('title')?.value,
-      description: this.courseForm.get('description')?.value,
-      duration: this.courseForm.get('duration')?.value,
-      authors: this.courseAuthorsControls.map(c => c.value),
-    };
+
+    const authorsList = this.courseAuthorsControls.map(c => c.value);
+    const durationVal = Number(this.courseForm.get('duration')?.value) || 0;
 
     if (this.isEdit && this.courseId) {
+      const payload: Course = {
+        id: this.courseId,
+        title: this.courseForm.get('title')?.value,
+        description: this.courseForm.get('description')?.value,
+        duration: durationVal,
+        authors: authorsList,
+        creationDate: this.currentCourse?.creationDate ?? new Date().toISOString(),
+      };
+
       this.coursesStore.editCourse(this.courseId, payload).subscribe({
         next: () => {
           this.isSubmitting = false;
@@ -145,6 +154,15 @@ export class CourseFormComponent implements OnInit {
         }
       });
     } else {
+      const payload: Course = {
+        id: String(Date.now()),
+        title: this.courseForm.get('title')?.value,
+        description: this.courseForm.get('description')?.value,
+        duration: durationVal,
+        authors: authorsList,
+        creationDate: new Date().toISOString(),
+      };
+
       this.coursesStore.createCourse(payload).subscribe({
         next: () => {
           this.isSubmitting = false;
