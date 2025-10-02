@@ -48,7 +48,7 @@ export class CoursesService {
   filterCourses(value: string): Observable<Course[]> {
     const params = new HttpParams().set('title', value);
     return this.http
-      .get<any>(`${this.apiUrl}/courses/filter`, { params })
+      .get<any>(`${this.apiUrl}/courses/all`, { params })
       .pipe(
         map(res => Array.isArray(res) ? res : (res.result || [])),
         catchError(() => of([]))
