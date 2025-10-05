@@ -51,7 +51,7 @@ export class CoursesService {
       params = params.set('title', title); 
     }
     return this.http
-      .get<any>(`${this.apiUrl}/courses/all`, { params })
+      .get<any>(`${this.apiUrl}/courses/filter`, { params })
       .pipe(map((response) => response.result));
   }
 
