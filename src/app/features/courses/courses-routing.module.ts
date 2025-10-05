@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: "", component: CoursesComponent, canActivate: [authorizedGuard] },
   { path: "add", component: CourseFormComponent, canActivate: [authorizedGuard, AdminGuard] },
   { path: "edit/:id", component: CourseFormComponent, canActivate: [authorizedGuard, AdminGuard] },
-  { path: ":id", component: CourseInfoComponent, canActivate: [authorizedGuard] } // будь-який залогінений користувач
+  { path: ":id", component: CourseInfoComponent, canActivate: [authorizedGuard] } 
 ];
 
 @NgModule({

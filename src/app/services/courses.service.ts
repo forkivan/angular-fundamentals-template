@@ -45,14 +45,14 @@ export class CoursesService {
     return this.http.delete<void>(`${this.apiUrl}/courses/${id}`);
   }
 
-  filterCourses(value: string): Observable<Course[]> {
-    const params = new HttpParams().set('title', value);
+  filterCourses(title: string): Observable<Course[]> {
+    let params = new HttpParams();
+    if (title) {
+      params = params.set('title', title); 
+    }
     return this.http
-      .get<any>(`${this.apiUrl}/courses/filter`, { params })
-      .pipe(
-        map(res => Array.isArray(res) ? res : (res.result || [])),
-        catchError(() => of([]))
-      );
+      .get<any>(`${this.apiUrl}/courses/all`, { params })
+      .pipe(map((response) => response.result));
   }
 
   getAllAuthors(): Observable<any> {

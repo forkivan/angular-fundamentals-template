@@ -35,7 +35,7 @@ export class CoursesComponent implements OnInit {
   onSearch() {
     const value = this.searchValue.trim();
     if (value) {
-      this.coursesStore.fetchFiltered(value);
+      this.coursesStore.filterCourses(value);
     } else {
       this.coursesStore.fetchAll();
     }
