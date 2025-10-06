@@ -19,7 +19,7 @@ export const initialState: CoursesState = {
   isAllCoursesLoading: false,
   isSingleCourseLoading: false,
   isSearchState: false,
-  errorMessage: null,
+  errorMessage: "",
 };
 
 const startLoading = (
@@ -28,7 +28,7 @@ const startLoading = (
 ) => ({
   ...state,
   ...keys.reduce((acc, k) => ({ ...acc, [k]: true }), {} as Partial<CoursesState>),
-  errorMessage: null,
+  errorMessage: "",
 });
 
 const fail = (state: CoursesState, payload: { error: CoursesError | string }) => ({
@@ -44,14 +44,14 @@ const successAllCourses = (state: CoursesState, courses: Course[]) => ({
   allCourses: courses,
   isAllCoursesLoading: false,
   isSearchState: false,
-  errorMessage: null,
+  errorMessage: "",
 });
 
 const successSingleCourse = (state: CoursesState, course: Course) => ({
   ...state,
   course,
   isSingleCourseLoading: false,
-  errorMessage: null,
+  errorMessage: "",
 });
 
 const successFilteredCourses = (state: CoursesState, courses: Course[]) => ({
@@ -59,31 +59,31 @@ const successFilteredCourses = (state: CoursesState, courses: Course[]) => ({
   allCourses: courses,
   isAllCoursesLoading: false,
   isSearchState: true,
-  errorMessage: null,
+  errorMessage: "",
 });
 
 const updateCourseInList = (state: CoursesState, course: Course) => ({
   ...state,
   allCourses: state.allCourses.map((existingCourse) =>
-    (existingCourse as any).id === (course as any).id ? course : existingCourse
+    existingCourse.id === course.id ? course : existingCourse
   ),
-  course: state.course && (state.course as any).id === (course as any).id ? course : state.course,
+  course: course,
   isAllCoursesLoading: false,
-  errorMessage: null,
+  errorMessage: "",
 });
 
 const removeCourseFromList = (state: CoursesState, id: string | number) => ({
   ...state,
-  allCourses: state.allCourses.filter((existingCourse) => (existingCourse as any).id !== id),
+  allCourses: state.allCourses.filter((existingCourse) => existingCourse.id !== String(id)),
   isAllCoursesLoading: false,
-  errorMessage: null,
+  errorMessage: "",
 });
 
 const addCourseToList = (state: CoursesState, course: Course) => ({
   ...state,
   allCourses: [course, ...state.allCourses],
   isAllCoursesLoading: false,
-  errorMessage: null,
+  errorMessage: "",
 });
 
 const reducerInternal = createReducer(
