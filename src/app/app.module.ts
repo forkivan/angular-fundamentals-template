@@ -8,6 +8,10 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { TokenInterceptor } from "@app/auth/interceptors/token.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 
+import { StoreModule } from "@ngrx/store";
+import { EffectsModule } from "@ngrx/effects";
+import { reducers, effects } from "@app/store";
+
 @NgModule({
   declarations: [AppComponent, CourseInfoComponent],
   imports: [
@@ -15,7 +19,10 @@ import { AppRoutingModule } from "./app-routing.module";
     SharedModule,
     FontAwesomeModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot(effects),
   ],
   providers: [
     {
