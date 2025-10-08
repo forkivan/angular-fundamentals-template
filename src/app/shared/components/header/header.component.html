@@ -2,14 +2,10 @@
   <img alt="logo" src="assets/logo.svg" />
 
   <div class="app-header__right">
-    <ng-container *ngIf="isAuthorized; else notAuth">
+    <ng-container *ngIf="isAuthorized;">
       <span class="header-actions__name">{{ name ? name : 'User' }}</span>
       <app-button [buttonText]="'Logout'" (clicked)="onLogout()"></app-button>
     </ng-container>
 
-    <ng-template #notAuth>
-      <app-button [buttonText]="'Login'" (clicked)="goToLogin()"></app-button>
-      <app-button [buttonText]="'Registration'" (clicked)="goToRegistration()"></app-button>
-    </ng-template>
   </div>
 </div>
