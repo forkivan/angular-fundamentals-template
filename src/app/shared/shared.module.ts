@@ -21,6 +21,8 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { EmailValidatorDirective } from './directives/email.directive';
 import { TogglePasswordDirective } from './directives/toggle-password.directive';
 
+import { RouterLink } from "@angular/router";
+
 const components = [
   HeaderComponent,
   ButtonComponent,
@@ -54,6 +56,7 @@ const directives = [
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterLink,
   ],
   exports: [
     ...components,
