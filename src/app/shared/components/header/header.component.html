@@ -3,7 +3,7 @@
 
   <div class="app-header__right">
     <ng-container *ngIf="isAuthorized;">
-      <span class="header-actions__name">{{ name ? name : 'User' }}</span>
+      <span class="header-actions__name">{{ name || 'User' }}</span>
       <app-button [buttonText]="'Logout'" (clicked)="onLogout()"></app-button>
       
     </ng-container>

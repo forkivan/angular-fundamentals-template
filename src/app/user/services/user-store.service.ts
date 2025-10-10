@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { UserService } from './user.service';
 import { SessionStorageService } from 'src/app/auth/services/session-storage.service';
 
@@ -22,26 +22,37 @@ export class UserStoreService {
   getUser(): Observable<any> {
     const token = this.session.getToken();
     if (!token) {
-      this.name$$.next(null);
-      this.isAdmin$$.next(false);
+      this.clearUser();
       return of(null);
     }
 
     return this.userService.getUser().pipe(
-      tap(user => {
-        const userName = user?.name ?? null;
-        const adminFlag = !!(user?.isAdmin || (user?.email === 'admin@email.com'));
-        this.name$$.next(userName);
-        this.isAdmin$$.next(adminFlag);
+      tap(response => {
+        const user = response?.result;
+        if (user) {
+          this.name$$.next(user.name || user.email || 'User');
+          this.isAdmin$$.next(user.role === 'admin');
+        } else {
+          this.clearUser();
+        }
+      }),
+      catchError(() => {
+        this.clearUser();
+        return of(null);
       })
     );
   }
 
-  setUserFromPayload(user: any) {
-    const userName = user?.name ?? user?.email ?? null;
-    const adminFlag = !!(user?.isAdmin || (user?.email === 'admin@email.com'));
-    this.name$$.next(userName);
-    this.isAdmin$$.next(adminFlag);
+  setUserFromPayload(payload: any) {
+    const user = payload?.user;
+    if (!user) return;
+    this.name$$.next(user.name || user.email || 'User');
+    this.isAdmin$$.next(user.role === 'admin');
+  }
+
+  private clearUser() {
+    this.name$$.next(null);
+    this.isAdmin$$.next(false);
   }
 
   get isAdmin(): boolean {
