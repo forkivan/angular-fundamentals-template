@@ -6,7 +6,7 @@
     (keyup.enter)="onSearch()"
   />
   <app-button [buttonText]="'Search'" (click)="onSearch()"></app-button>
-  <button *ngIf="isAdmin$ | async" (click)="addCourse()">Add course</button>
+  <app-button [buttonText]="'Add course'" *ngIf="isAdmin$ | async" (click)="addCourse()"></app-button>
 </div>
 
 <div *ngIf="isLoading$ | async" class="loading">Loading...</div>
