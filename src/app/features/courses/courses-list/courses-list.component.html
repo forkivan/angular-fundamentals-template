@@ -1,7 +1,7 @@
 <div class="courses-list">
   <div *ngIf="!courses || courses.length === 0" class="courses-list__empty">
-    <app-info [title]="'Your list is empty'" [text]="'Please add new courses or import some.'">
-      <app-button [buttonText]="'Add new course'"></app-button>
+    <app-info 
+      [title]="'Your list is empty'" [text]="'Please add new courses or import some.'">
     </app-info>
   </div>
 

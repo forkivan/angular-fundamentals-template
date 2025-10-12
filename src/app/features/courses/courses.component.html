@@ -1,12 +1,9 @@
-<div class="search-bar">
-  <input
-    type="text"
-    [(ngModel)]="searchValue"
-    placeholder="Search courses"
-    (keyup.enter)="onSearch()"
-  />
-  <app-button [buttonText]="'Search'" (click)="onSearch()"></app-button>
-  <app-button [buttonText]="'Add course'" *ngIf="isAdmin$ | async" (click)="addCourse()"></app-button>
+<div class="app-courses__top">
+  <app-search
+    [placeholder]="'Search courses'"
+    (search)="onSearch($event)"
+  ></app-search>
+  <app-button [buttonText]="'Add new course'" class="addCourse" *ngIf="isAdmin$ | async" (click)="addCourse()"></app-button>
 </div>
 
 <div *ngIf="isLoading$ | async" class="loading">Loading...</div>

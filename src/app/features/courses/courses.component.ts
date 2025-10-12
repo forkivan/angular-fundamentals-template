@@ -32,8 +32,12 @@ export class CoursesComponent implements OnInit {
     }
   }
 
-  onSearch() {
-    const value = this.searchValue.trim();
+  onSearch(term?: string) {
+    if (typeof term === 'string') {
+      this.searchValue = term.trim();
+    }
+
+    const value = (this.searchValue || '').trim();
     if (value) {
       this.coursesStore.filterCourses(value);
     } else {
