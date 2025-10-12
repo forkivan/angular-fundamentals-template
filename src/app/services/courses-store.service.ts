@@ -156,6 +156,27 @@ export class CoursesStoreService {
     return this.coursesService.getAuthorById(id);
   }
 
+  deleteAuthor(id: string): Observable<any> {
+    this.setLoading(true);
+    return this.coursesService.deleteAuthor(id).pipe(
+      tap(() => {
+        this.authorsMap = {};
+        const current = (this.courses$$.value || []).map(c => {
+          if (!c) return c;
+          const authorsArr = c.authors ?? [];
+          const filtered = (authorsArr || []).filter((aid: any) => aid !== id);
+          return { ...c, authors: filtered };
+        });
+        this.courses$$.next(current);
+      }),
+      finalize(() => this.setLoading(false)),
+      catchError((err) => {
+        this.setLoading(false);
+        return of(null);
+      })
+    );
+  }
+
   private mapCourseAuthors(course: any): any {
     if (!course) return course;
     const authorsIds = course.authors ?? [];

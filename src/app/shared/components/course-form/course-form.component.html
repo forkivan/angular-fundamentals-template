@@ -1,4 +1,4 @@
-<h2>Course Edit/Create Page</h2>
+<h2>{{ isEdit ? 'Edit Course' : 'Create Course' }}</h2>
 <form [formGroup]="courseForm" (ngSubmit)="submit()">
   <div class="app-plate">
     <div class="course">
@@ -76,16 +76,16 @@
             </span>
           </div>
 
-          <h4 id="course__authors__list__label">Authors List</h4>
+          <h4 id="course__authors__list__label">Authors List (from server)</h4>
           <div class="course__authors">
-            <div *ngFor="let a of authorsControls; let i = index" class="course__authors-item">
-              <div class="author-text">{{ a.value }}</div>
+            <div *ngFor="let a of allAuthorsList; let i = index" class="course__authors-item">
+              <div class="author-text">{{ a.name }}</div>
               <div class="author-actions">
-                <fa-icon [icon]="['fas','plus']" class="course__icon" (click)="addAuthorToCourse(i)"></fa-icon>
-                <fa-icon icon="trash" class="course__icon" (click)="removeAuthor(i)"></fa-icon>
+                <fa-icon [icon]="['fas','plus']" class="course__icon" (click)="addServerAuthor(i)"></fa-icon>
+                <fa-icon icon="trash" class="course__icon" (click)="deleteServerAuthor(i)"></fa-icon>
 
-                <button type="button" (click)="addAuthorToCourse(i)" [attr.data-index]="i" class="test-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
-                <button type="button" (click)="removeAuthor(i)" [attr.data-index-remove]="i" class="test-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
+                <button type="button" (click)="addServerAuthor(i)" [attr.data-index]="i" class="test-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
+                <button type="button" (click)="deleteServerAuthor(i)" [attr.data-index-delete]="i" class="test-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
               </div>
             </div>
           </div>
@@ -96,7 +96,7 @@
           <span id="courseAuthorsEmpty" class="inputLabel" *ngIf="courseAuthorsControls.length === 0">Author list is empty</span>
           <div class="course__authors">
             <div *ngFor="let ca of courseAuthorsControls; let i = index" class="course__authors-item">
-              <div class="author-text">{{ ca.value }}</div>
+              <div class="author-text">{{ getAuthorNameById(ca.value) }}</div>
               <div class="author-actions">
                 <fa-icon icon="trash" class="course__icon" (click)="removeAuthorFromCourse(i)"></fa-icon>
                 <button type="button" (click)="removeAuthorFromCourse(i)" [attr.data-index-courseremove]="i" class="test-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;border:0;padding:0;margin:0;"></button>
@@ -107,7 +107,7 @@
       </div>
 
       <div class="form__action">
-        <app-button (clicked)="courseForm.reset(); submitted = false" [buttonText]="'Cancel'"></app-button>
+        <app-button (clicked)="onCancel()" [buttonText]="'Cancel'"></app-button>
         <app-button (clicked)="submit()" [buttonText]="isEdit ? 'Save' : 'Create Course'"></app-button>
         <button type="submit" style="display:none"></button>
       </div>

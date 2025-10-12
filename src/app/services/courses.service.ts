@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable, of } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 export interface Course {
   id: string;
@@ -48,7 +48,7 @@ export class CoursesService {
   filterCourses(title: string): Observable<Course[]> {
     let params = new HttpParams();
     if (title) {
-      params = params.set('title', title); 
+      params = params.set('title', title);
     }
     return this.http
       .get<any>(`${this.apiUrl}/courses/filter`, { params })
@@ -65,5 +65,9 @@ export class CoursesService {
 
   getAuthorById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/authors/${id}`);
+  }
+
+  deleteAuthor(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/authors/${id}`);
   }
 }
