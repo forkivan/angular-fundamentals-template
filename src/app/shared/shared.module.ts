@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from "@angular/common/http";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -21,7 +22,7 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { EmailValidatorDirective } from './directives/email.directive';
 import { TogglePasswordDirective } from './directives/toggle-password.directive';
 
-import { RouterLink } from "@angular/router";
+import { RouterModule } from "@angular/router";
 
 const components = [
   HeaderComponent,
@@ -56,7 +57,8 @@ const directives = [
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterLink,
+    HttpClientModule,
+    RouterModule, 
   ],
   exports: [
     ...components,
@@ -65,7 +67,8 @@ const directives = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    RouterModule 
   ]
 })
 export class SharedModule { }
